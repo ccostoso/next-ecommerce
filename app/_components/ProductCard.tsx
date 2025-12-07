@@ -18,6 +18,7 @@ export function ProductCard({ product }: ProductCardTypes) {
 					fill
 				/>
 			</figure>
+			<hr className="mt-4 mb-2 border-gray-200 dark:border-gray-700" />
 			<h2 className="text-lg font-semibold dark:text-white">
 				{product.name}
 			</h2>
