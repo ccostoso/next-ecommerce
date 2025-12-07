@@ -1,4 +1,4 @@
-import { Product } from "@/lib/mocks";
+import { Product } from "@/app/generated/prisma/client";
 import { formatPrice } from "@/lib/utils";
 import Image from "next/image";
 
@@ -10,13 +10,15 @@ export function ProductCard({ product }: ProductCardTypes) {
 	return (
 		<div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 dark:bg-gray-800">
 			<figure className="relative aspect-video">
-				<Image
-					src={product.image}
-					alt={product.name}
-					className="object-cover"
-					sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-					fill
-				/>
+				{product.image && (
+					<Image
+						src={product.image}
+						alt={product.name}
+						className="object-cover"
+						sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+						fill
+					/>
+				)}
 			</figure>
 			<hr className="mt-4 mb-2 border-gray-200 dark:border-gray-700" />
 			<h2 className="text-lg font-semibold dark:text-white">
