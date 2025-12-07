@@ -5,16 +5,25 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
-  output   = "../app/generated/prisma"
+	provider = "prisma-client"
+	output   = "../app/generated/prisma"
 }
 
 datasource db {
-  provider = "postgresql"
+	provider = "postgresql"
 }
 
 model Product {
-  id          String   @id @default(cuid())
-  name        String
-  description String?
+	id          String   @id @default(cuid())
+	name        String
+	description String?
+    category    Category @relation(fields: [categoryId], references: [id])
+  	categoryId  String
+}
+
+model Category {
+	id          String   @id @default(cuid())
+	name        String
+	slug        String   @unique
+	products    Product[]
 }
