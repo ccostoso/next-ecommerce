@@ -1,6 +1,15 @@
 import { Product } from "@/app/generated/prisma/client";
 import { ProductCard } from "./_components/ProductCard";
 import prisma from "@/lib/prisma";
+import {
+	Pagination,
+	PaginationContent,
+	PaginationEllipsis,
+	PaginationItem,
+	PaginationLink,
+	PaginationNext,
+	PaginationPrevious,
+} from "@/components/ui/pagination";
 
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
 
@@ -15,10 +24,15 @@ export default async function HomePage({
 	const pageSize = 3;
 	const skip = (page - 1) * pageSize;
 
-	const products: Product[] = await prisma.product.findMany({
-		skip,
-		take: pageSize,
-	});
+	const [products, total] = await Promise.all([
+		prisma.product.findMany({
+			skip,
+			take: pageSize,
+		}),
+		prisma.product.count(),
+	]);
+
+	const totalPages = Math.ceil(total / pageSize);
 
 	await new Promise((resolve) => setTimeout(resolve, 1000));
 
@@ -34,6 +48,50 @@ export default async function HomePage({
 					<ProductCard key={product.id} product={product} />
 				))}
 			</section>
+
+			<Pagination className="mt-8">
+				<PaginationContent>
+					<PaginationItem>
+						<PaginationPrevious href={`?page=${page - 1}`} />
+					</PaginationItem>
+
+					{Array.from({ length: totalPages }).map((_, index) => {
+						const pageNumber = index + 1;
+
+						if (
+							// Show first, last, current, and adjacent pages
+							pageNumber === 1 ||
+							pageNumber === totalPages ||
+							(pageNumber >= page - 1 && pageNumber <= page + 1)
+						) {
+							return (
+								<PaginationItem key={pageNumber}>
+									<PaginationLink
+										href={`?page=${pageNumber}`}
+										isActive={pageNumber === page}
+									>
+										{pageNumber}
+									</PaginationLink>
+								</PaginationItem>
+							);
+						}
+
+						return null;
+					})}
+
+					<PaginationItem>
+						<PaginationNext
+							href={`?page=${page + 1}`}
+							aria-disabled={page >= totalPages}
+							className={
+								page >= totalPages
+									? "pointer-events-none opacity-50"
+									: ""
+							}
+						/>
+					</PaginationItem>
+				</PaginationContent>
+			</Pagination>
 		</main>
 	);
 }
