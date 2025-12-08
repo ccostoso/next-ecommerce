@@ -1,7 +1,6 @@
 import { Product } from "@/app/generated/prisma/client";
 import {
 	Card,
-	CardAction,
 	CardDescription,
 	CardFooter,
 	CardHeader,
@@ -16,7 +15,7 @@ type ProductCardTypes = {
 
 export function ProductCard({ product }: ProductCardTypes) {
 	return (
-		<Card className="pt-0 overflow-hidden">
+		<Card className="pt-0 overflow-hidden flex flex-col">
 			<figure className="relative aspect-video">
 				{product.image && (
 					<Image
@@ -33,7 +32,7 @@ export function ProductCard({ product }: ProductCardTypes) {
 				<CardDescription>{product.description}</CardDescription>
 			</CardHeader>
 
-			<CardFooter>
+			<CardFooter className="mt-auto">
 				<p>{formatPrice(product.price)}</p>
 			</CardFooter>
 		</Card>
