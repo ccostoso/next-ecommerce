@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Link from "next/dist/client/link";
 import { ThemeProvider } from "@/components/theme-provider";
+import { ModeToggle } from "@/components/mode-toggle";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -42,6 +43,9 @@ export default function RootLayout({
 							</li>
 							<li>
 								<Link href="/products">Products</Link>
+							</li>
+							<li>
+								<ModeToggle />
 							</li>
 						</ul>
 						{children}
