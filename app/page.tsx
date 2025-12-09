@@ -65,7 +65,15 @@ export default async function HomePage({ searchParams }: HomePageProps) {
 			<Pagination className="mt-8">
 				<PaginationContent>
 					<PaginationItem>
-						<PaginationPrevious href={`?page=${page - 1}`} />
+						<PaginationPrevious
+							href={`?page=${page - 1}`}
+							aria-disabled={page <= 1}
+							className={
+								page <= 1
+									? "pointer-events-none opacity-50"
+									: ""
+							}
+						/>
 					</PaginationItem>
 
 					{Array.from({ length: totalPages }).map((_, index) => {
