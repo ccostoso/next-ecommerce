@@ -11,6 +11,27 @@ type ProductPageProps = {
 	}>;
 };
 
+export async function generateMetadata({ params }: ProductPageProps) {
+	const { slug } = await params;
+	const product = await getProductBySlug(slug);
+
+	if (!product) {
+		return {
+			title: "Product Not Found",
+		};
+	}
+
+	return {
+		title: product.name,
+		description: product.description,
+		openGraph: {
+			title: product.name,
+			description: product.description,
+			images: product.image ? [{ url: product.image }] : [],
+		},
+	};
+}
+
 export default async function ProductPage({ params }: ProductPageProps) {
 	const { slug } = await params;
 	const product = await getProductBySlug(slug);
