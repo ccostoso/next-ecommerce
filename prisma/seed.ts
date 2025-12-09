@@ -39,6 +39,7 @@ async function main() {
 				connect: { id: electronics.id },
 			},
 			slug: "wireless-headphones",
+			inventory: 50,
 		},
 		{
 			id: "2",
@@ -51,6 +52,7 @@ async function main() {
 				connect: { id: electronics.id },
 			},
 			slug: "smart-watch",
+			inventory: 30,
 		},
 		{
 			id: "3",
@@ -63,6 +65,7 @@ async function main() {
 				connect: { id: clothing.id },
 			},
 			slug: "running-shoes",
+			inventory: 100,
 		},
 		{
 			id: "4",
@@ -74,6 +77,7 @@ async function main() {
 				connect: { id: home.id },
 			},
 			slug: "ceramic-mug",
+			inventory: 0,
 		},
 		{
 			id: "5",
@@ -85,6 +89,7 @@ async function main() {
 				connect: { id: clothing.id },
 			},
 			slug: "leather-backpack",
+			inventory: 75,
 		},
 	];
 

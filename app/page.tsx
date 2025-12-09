@@ -10,6 +10,8 @@ import {
 } from "@/components/ui/pagination";
 import { Suspense } from "react";
 import { ProductsSkeleton } from "./_components/ProductsSkeleton";
+import { getProductBySlug } from "@/lib/actions";
+import { sleep } from "@/lib/utils";
 
 const pageSize = 3;
 
@@ -28,7 +30,7 @@ async function Products({ page }: ProductsProps) {
 		take: pageSize,
 	});
 
-	await new Promise((resolve) => setTimeout(resolve, 1000));
+	await sleep(1000);
 
 	return (
 		<>
@@ -47,7 +49,6 @@ async function Products({ page }: ProductsProps) {
 
 export default async function HomePage({ searchParams }: HomePageProps) {
 	const { page: pageParam } = await searchParams;
-
 	const page = Number(pageParam) || 1;
 
 	const total = await prisma.product.count();
