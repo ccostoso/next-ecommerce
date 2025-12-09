@@ -51,8 +51,6 @@ export default async function HomePage({ searchParams }: HomePageProps) {
 	const { page: pageParam } = await searchParams;
 	const page = Number(pageParam) || 1;
 
-	console.log(await getProductBySlug("smart-watch"));
-
 	const total = await prisma.product.count();
 	const totalPages = Math.ceil(total / pageSize);
 

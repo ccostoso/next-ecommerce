@@ -37,6 +37,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
 	const { slug } = await params;
 	const product = await getProductBySlug(slug);
 
+	console.log("Product:", product);
+
 	if (!product) return notFound();
 
 	await sleep(1000);
@@ -70,10 +72,37 @@ export default async function ProductPage({ params }: ProductPageProps) {
 								{product.category?.name}
 							</Badge>
 						</div>
+
 						<Separator className="my-4" />
 						<div className="space-y-2">
 							<h2 className="font-medium">Description</h2>
 							<p>{product.description}</p>
+						</div>
+
+						<Separator className="my-4" />
+						<div className="space-y-2">
+							<h2 className="font-medium">Availability</h2>
+							<div className="flex items-center gap-2">
+								{product.inventory > 0 ? (
+									<Badge
+										variant="outline"
+										className="bg-green-100 text-green-800"
+									>
+										In Stock
+									</Badge>
+								) : (
+									<Badge
+										variant="outline"
+										className="bg-red-100 text-red-800"
+									>
+										Out of Stock
+									</Badge>
+								)}
+
+								<span className="text-xs text-gray-600">
+									{product.inventory} items available
+								</span>
+							</div>
 						</div>
 					</div>
 				</CardContent>
