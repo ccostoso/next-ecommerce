@@ -10,8 +10,8 @@ import {
 } from "@/components/ui/pagination";
 import { Suspense } from "react";
 import { ProductsSkeleton } from "./_components/ProductsSkeleton";
-import { get } from "http";
 import { getProductBySlug } from "@/lib/actions";
+import { sleep } from "@/lib/utils";
 
 const pageSize = 3;
 
@@ -30,7 +30,7 @@ async function Products({ page }: ProductsProps) {
 		take: pageSize,
 	});
 
-	await new Promise((resolve) => setTimeout(resolve, 1000));
+	await sleep(1000);
 
 	return (
 		<>
