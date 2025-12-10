@@ -11,7 +11,7 @@ const categories = [
 
 export function Navbar() {
 	return (
-		<div className="border-b">
+		<div className="border-b border-dashed border-border">
 			<div className="container mx-auto p-4 flex items-center justify-between">
 				<div className="flex items-center gap-6">
 					<Link href="/" className="text-2xl font-bold">
@@ -29,7 +29,7 @@ export function Navbar() {
 						))}
 					</nav>
 				</div>
-				<div className="flex items-center gap-4">
+				<div className="flex items-center gap-0">
 					<Button variant="ghost" size="icon" asChild>
 						<Link href="/search">
 							<Search />
