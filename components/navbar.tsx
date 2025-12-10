@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Search, ShoppingCart } from "lucide-react";
 import { MobileNav } from "./mobile-nav";
 
-const categories = [
+export const categories = [
 	{ id: 1, name: "Electronics", href: "/category/electronics" },
 	{ id: 2, name: "Clothing", href: "/category/clothing" },
 	{ id: 3, name: "Home", href: "/category/home" },
