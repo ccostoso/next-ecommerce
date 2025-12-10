@@ -34,10 +34,6 @@ async function Products({ page }: ProductsProps) {
 
 	return (
 		<>
-			<p className="mb-4 text-gray-700 dark:text-gray-300">
-				Showing {products.length} product
-				{products.length !== 1 ? "s" : ""}
-			</p>
 			<section className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
 				{products.map((product) => (
 					<ProductCard key={product.id} product={product} />

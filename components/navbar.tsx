@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ModeToggle } from "./mode-toggle";
 import { Button } from "@/components/ui/button";
 import { Search, ShoppingCart } from "lucide-react";
+import { MobileNav } from "./mobile-nav";
 
 const categories = [
 	{ id: 1, name: "Electronics", href: "/category/electronics" },
@@ -14,7 +15,10 @@ export function Navbar() {
 		<div className="border-b border-dashed border-border">
 			<div className="container mx-auto p-4 flex items-center justify-between">
 				<div className="flex items-center gap-6">
-					<Link href="/" className="text-2xl font-bold">
+					<Link
+						href="/"
+						className="text-2xl font-bold hidden md:block"
+					>
 						Next-Commerce
 					</Link>
 					<nav className="hidden md:flex items-center gap-6">
@@ -28,6 +32,8 @@ export function Navbar() {
 							</Link>
 						))}
 					</nav>
+
+					<MobileNav />
 				</div>
 				<div className="flex items-center gap-0">
 					<Button variant="ghost" size="icon" asChild>
