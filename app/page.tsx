@@ -12,6 +12,7 @@ import { Suspense } from "react";
 import { ProductsSkeleton } from "./_components/ProductsSkeleton";
 import { getProductBySlug } from "@/lib/actions";
 import { sleep } from "@/lib/utils";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 const pageSize = 3;
 
@@ -34,10 +35,6 @@ async function Products({ page }: ProductsProps) {
 
 	return (
 		<>
-			<p className="mb-4 text-gray-700 dark:text-gray-300">
-				Showing {products.length} product
-				{products.length !== 1 ? "s" : ""}
-			</p>
 			<section className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
 				{products.map((product) => (
 					<ProductCard key={product.id} product={product} />
@@ -56,8 +53,9 @@ export default async function HomePage({ searchParams }: HomePageProps) {
 
 	return (
 		<main className="container mx-auto p-4">
-			<h1 className="text-3xl font-bold mb-6">Home</h1>
-
+			<Breadcrumbs
+				items={[{ label: "Products", href: "/", active: true }]}
+			/>
 			<Suspense key={page} fallback={<ProductsSkeleton />}>
 				<Products page={page} />
 			</Suspense>
@@ -65,7 +63,15 @@ export default async function HomePage({ searchParams }: HomePageProps) {
 			<Pagination className="mt-8">
 				<PaginationContent>
 					<PaginationItem>
-						<PaginationPrevious href={`?page=${page - 1}`} />
+						<PaginationPrevious
+							href={`?page=${page - 1}`}
+							aria-disabled={page <= 1}
+							className={
+								page <= 1
+									? "pointer-events-none opacity-50"
+									: ""
+							}
+						/>
 					</PaginationItem>
 
 					{Array.from({ length: totalPages }).map((_, index) => {

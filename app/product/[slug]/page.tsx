@@ -7,6 +7,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart } from "lucide-react";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 type ProductPageProps = {
 	params: Promise<{
@@ -43,11 +44,22 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
 	if (!product) return notFound();
 
+	const breadcrumbItems = [
+		{ label: "Products", href: "/", active: false },
+		{
+			label: product.category.name,
+			href: `/category/${product.category?.slug}`,
+			active: true,
+		},
+		{ label: product.name, href: `/product/${product.slug}`, active: true },
+	];
+
 	await sleep(1000);
 
 	return (
 		<main className="container mx-auto p-4">
-			<Card className="max-w-3xl mx-auto">
+			<Breadcrumbs items={breadcrumbItems} />
+			<Card>
 				<CardContent className="p-6 grid grid-cols-1 gap-4 md:grid-cols-2">
 					<figure className="relative rounded-lg overflow-hidden aspect-video">
 						{product.image && (
