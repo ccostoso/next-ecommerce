@@ -42,6 +42,12 @@ export default function RootLayout({
 							<Navbar />
 						</header>
 						{children}
+						<footer className="border-t border-dashed border-border mt-8">
+							<div className="container mx-auto p-4 text-center text-sm text-muted-foreground">
+								&copy; {new Date().getFullYear()} Next-Commerce.
+								All rights reserved.
+							</div>
+						</footer>
 					</>
 				</ThemeProvider>
 			</body>
