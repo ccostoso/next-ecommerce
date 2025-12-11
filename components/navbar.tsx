@@ -3,6 +3,7 @@ import { ModeToggle } from "./mode-toggle";
 import { Button } from "@/components/ui/button";
 import { Search, ShoppingCart } from "lucide-react";
 import { MobileNav } from "./mobile-nav";
+import { SearchInput } from "./search-input";
 
 export const categories = [
 	{ id: 1, name: "Electronics", href: "/category/electronics" },
@@ -13,14 +14,19 @@ export const categories = [
 export function Navbar() {
 	return (
 		<div className="border-b border-dashed border-border">
-			<div className="container mx-auto p-4 flex items-center justify-between">
-				<div className="flex items-center gap-6">
+			<div className="container mx-auto p-4 flex items-center gap-6">
+				{/* Logo and Category Navigation */}
+				{/* Won't shrink because of `.shrink-0` */}
+				<div className="flex items-center gap-6 shrink-0">
+					{/* Logo/Link to Home */}
 					<Link
 						href="/"
-						className="text-2xl font-bold hidden md:block"
+						className="text-2xl font-bold hidden md:block whitespace-nowrap"
 					>
 						Next-Commerce
 					</Link>
+
+					{/* Category Navigation */}
 					<nav className="hidden md:flex items-center gap-6">
 						{categories.map((category) => (
 							<Link
@@ -33,15 +39,19 @@ export function Navbar() {
 						))}
 					</nav>
 
+					{/* Mobile Navigation */}
 					<MobileNav />
 				</div>
-				<div className="flex items-center gap-0">
-					<Button variant="ghost" size="icon" asChild>
-						<Link href="/search">
-							<Search />
-						</Link>
-					</Button>
 
+				{/* Search Input */}
+				{/* Will fill available space because of `.flex-1` */}
+				<div className="hidden md:block flex-1 min-w-0">
+					<SearchInput />
+				</div>
+
+				{/* Action Buttons */}
+				{/* Won't shrink because of `.shrink-0` */}
+				<div className="flex items-center gap-0 shrink-0">
 					<Button variant="ghost" size="icon" asChild>
 						<Link href="/cart">
 							<ShoppingCart />
