@@ -8,12 +8,14 @@ import {
 	BreadcrumbSeparator,
 } from "./ui/breadcrumb";
 
+export type BreadcrumbsItem = {
+	label: string;
+	href?: string;
+	active?: boolean;
+};
+
 type BreadcrumbsProps = {
-	items: {
-		label: string;
-		href?: string;
-		active?: boolean;
-	}[];
+	items: BreadcrumbsItem[];
 };
 
 export function Breadcrumbs({ items }: BreadcrumbsProps) {

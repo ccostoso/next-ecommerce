@@ -47,7 +47,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 		{
 			label: product.category.name,
 			href: `/category/${product.category?.slug}`,
-			active: true,
+			active: false,
 		},
 		{ label: product.name, href: `/product/${product.slug}`, active: true },
 	];
@@ -58,7 +58,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 		<main className="container mx-auto p-4">
 			<Breadcrumbs items={breadcrumbItems} />
 			<Card>
-				<CardContent className="p-6 grid grid-cols-1 gap-4 md:grid-cols-2">
+				<CardContent className="p-6 grid grid-cols-1 gap-8 md:grid-cols-2">
 					<figure className="relative rounded-lg overflow-hidden aspect-video">
 						{product.image && (
 							<Image

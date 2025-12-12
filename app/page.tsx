@@ -18,6 +18,7 @@ const pageSize = 3;
 type HomePageProps = {
 	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
+
 type ProductsProps = {
 	page: number;
 };
