@@ -16,8 +16,11 @@ type ProductCardTypes = {
 
 export function ProductCard({ product }: ProductCardTypes) {
 	return (
-		<Link href={`/product/${product.slug}`}>
-			<Card className="pt-0 overflow-hidden flex flex-col">
+		<Link
+			href={`/product/${product.slug}`}
+			className="h-full min-h-[450px]"
+		>
+			<Card className="pt-0 overflow-hidden flex flex-col h-full min-h-[450px]">
 				<figure className="relative aspect-video">
 					{product.image && (
 						<Image
@@ -31,7 +34,9 @@ export function ProductCard({ product }: ProductCardTypes) {
 				</figure>
 				<CardHeader>
 					<CardTitle>{product.name}</CardTitle>
-					<CardDescription>{product.description}</CardDescription>
+					<CardDescription className="line-clamp-2">
+						{product.description}
+					</CardDescription>
 				</CardHeader>
 
 				<CardFooter className="mt-auto">

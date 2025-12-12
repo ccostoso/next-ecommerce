@@ -46,7 +46,7 @@ export function Navbar() {
 				{/* Search Input */}
 				{/* Will fill available space because of `.flex-1` */}
 				{/* `min-w-0` permits shrinking when space is tight and text overflows */}
-				<div className="hidden md:block flex-1 min-w-0">
+				<div className="block flex-1 min-w-0">
 					<SearchInput />
 				</div>
 
