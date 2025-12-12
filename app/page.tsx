@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/pagination";
 import { Suspense } from "react";
 import { ProductsSkeleton } from "./_components/ProductsSkeleton";
-import { getProductBySlug } from "@/lib/actions";
 import { sleep } from "@/lib/utils";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 
@@ -19,6 +18,7 @@ const pageSize = 3;
 type HomePageProps = {
 	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
+
 type ProductsProps = {
 	page: number;
 };
