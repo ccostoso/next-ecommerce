@@ -59,10 +59,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 	const { query } = await searchParams;
 	const trimmed = query?.trim() ?? "";
 
-	const breadcrumbs: BreadcrumbsItem[] = [
-		{ label: "Products", href: "/" },
-		{ label: "Search", href: "/search" },
-	];
+	const breadcrumbs: BreadcrumbsItem[] = [{ label: "Products", href: "/" }];
 
 	trimmed &&
 		breadcrumbs.push({
