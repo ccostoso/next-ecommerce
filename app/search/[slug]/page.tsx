@@ -84,7 +84,7 @@ export default async function CategoryPage({
 	];
 
 	return (
-		<main className="container mx-auto p-4">
+		<>
 			<Breadcrumbs items={breadcrumbs} />
 
 			<div className="flex gap-3 text-sm mb-8">
@@ -103,27 +103,9 @@ export default async function CategoryPage({
 				</Link>
 			</div>
 
-			<div className="flex gap-4">
-				<Suspense
-					fallback={
-						<div className="w-[125px] flex-none">
-							<p className="text-sm text-muted-foreground mb-2">
-								Loading...
-							</p>
-						</div>
-					}
-				>
-					<CategorySidebar activeCategory={slug} />
-				</Suspense>
-				<div className="flex-1">
-					<Suspense
-						key={`${slug}-${sort}`}
-						fallback={<ProductsSkeleton />}
-					>
-						<Products slug={slug} sort={sort} />
-					</Suspense>
-				</div>
-			</div>
-		</main>
+			<Suspense key={`${slug}-${sort}`} fallback={<ProductsSkeleton />}>
+				<Products slug={slug} sort={sort} />
+			</Suspense>
+		</>
 	);
 }
