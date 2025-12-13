@@ -87,22 +87,6 @@ export default async function CategoryPage({
 		<>
 			<Breadcrumbs items={breadcrumbs} />
 
-			<div className="flex gap-3 text-sm mb-8">
-				<Link
-					href={`/search/${category.slug}?sort=price_asc`}
-					className="underline"
-				>
-					Sort by Price: Low to High
-				</Link>
-				<span>|</span>
-				<Link
-					href={`/search/${category.slug}?sort=price_desc`}
-					className="underline"
-				>
-					Sort by Price: High to Low
-				</Link>
-			</div>
-
 			<Suspense key={`${slug}-${sort}`} fallback={<ProductsSkeleton />}>
 				<Products slug={slug} sort={sort} />
 			</Suspense>

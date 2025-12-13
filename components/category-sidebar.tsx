@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 
@@ -25,11 +26,15 @@ export function CategorySidebar({ categories }: CategorySidebarProps) {
 					<li key={category.slug}>
 						<Link
 							href={`/search/${category.slug}`}
-							className={`font-medium text-accent hover:text-primary ${
-								activeCategory === category.slug
-									? "font-semibold text-primary"
-									: "text-muted-foreground"
-							}`}
+							className={cn(
+								"font-medium text-accent hover:text-primary",
+								{
+									"font-semibold text-primary":
+										activeCategory === category.slug,
+									"text-muted-foreground":
+										activeCategory !== category.slug,
+								}
+							)}
 						>
 							{category.name}
 						</Link>
