@@ -5,22 +5,34 @@ import prisma from "@/lib/prisma";
 import { Suspense } from "react";
 import { ProductsSkeleton } from "../../_components/ProductsSkeleton";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 
 type CategoryPageProps = {
 	params: Promise<{ slug: string }>;
+	searchParams: Promise<{ sort?: string }>;
 };
 
 type ProductsProps = {
 	slug: string;
+	sort?: string;
 };
 
-async function Products({ slug }: ProductsProps) {
+async function Products({ slug, sort }: ProductsProps) {
+	let orderBy: Record<string, "asc" | "desc"> | undefined = undefined;
+
+	if (sort === "price_asc") {
+		orderBy = { price: "asc" };
+	} else if (sort === "price_desc") {
+		orderBy = { price: "desc" };
+	}
+
 	const products = await prisma.product.findMany({
 		where: {
 			category: {
 				slug,
 			},
 		},
+		...(orderBy ? { orderBy } : {}),
 		take: 18,
 	});
 
@@ -45,8 +57,12 @@ async function Products({ slug }: ProductsProps) {
 	);
 }
 
-export default async function CategoryPage({ params }: CategoryPageProps) {
+export default async function CategoryPage({
+	params,
+	searchParams,
+}: CategoryPageProps) {
 	const { slug } = await params;
+	const { sort } = await searchParams;
 
 	const category = await prisma.category.findUnique({
 		where: { slug },
@@ -70,8 +86,24 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 		<main className="container mx-auto p-4">
 			<Breadcrumbs items={breadcrumbs} />
 
-			<Suspense key={category.slug} fallback={<ProductsSkeleton />}>
-				<Products slug={category.slug} />
+			<div className="flex gap-3 text-sm mb-8">
+				<Link
+					href={`/search/${category.slug}?sort=price_asc`}
+					className="underline"
+				>
+					Sort by Price: Low to High
+				</Link>
+				<span>|</span>
+				<Link
+					href={`/search/${category.slug}?sort=price_desc`}
+					className="underline"
+				>
+					Sort by Price: High to Low
+				</Link>
+			</div>
+
+			<Suspense key={`${slug}-${sort}`} fallback={<ProductsSkeleton />}>
+				<Products slug={slug} sort={sort} />
 			</Suspense>
 		</main>
 	);
