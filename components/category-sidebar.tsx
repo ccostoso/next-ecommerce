@@ -1,20 +1,20 @@
-import prisma from "@/lib/prisma";
-import { sleep } from "@/lib/utils";
-import Link from "next/link";
+"use client";
 
-type CategorySidebarProps = {
-	activeCategory?: string;
+import Link from "next/link";
+import { useParams } from "next/navigation";
+
+type Category = {
+	name: string;
+	slug: string;
 };
 
-export async function CategorySidebar({
-	activeCategory,
-}: CategorySidebarProps) {
-	const categories = await prisma.category.findMany({
-		select: { name: true, slug: true },
-		orderBy: { name: "asc" },
-	});
+type CategorySidebarProps = {
+	categories: Category[];
+};
 
-	await sleep(1000);
+export function CategorySidebar({ categories }: CategorySidebarProps) {
+	const params = useParams();
+	const activeCategory = params?.slug;
 
 	return (
 		<aside className="w-[125px] flex-none">
