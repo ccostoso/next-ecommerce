@@ -2,6 +2,7 @@
 
 import { Prisma } from "@/app/generated/prisma/client";
 import { prisma } from "./prisma";
+import { cookies } from "next/headers";
 
 export type GetProductsParams = {
 	query?: string;
@@ -94,3 +95,35 @@ export type ShoppingCart = CartWithProducts & {
 	size: number;
 	subtotal: number;
 };
+
+export async function getCart(): Promise<ShoppingCart | null> {
+	const cartId = (await cookies()).get("cartId")?.value;
+
+	if (!cartId) return null;
+
+	const cart = await prisma.cart.findUnique({
+		where: { id: cartId },
+		include: {
+			items: {
+				include: {
+					product: true,
+				},
+			},
+		},
+	});
+
+	if (!cart) return null;
+
+	// Calculate size and subtotal
+	const size = cart.items.reduce((acc, item) => acc + item.quantity, 0);
+	const subtotal = cart.items.reduce(
+		(acc, item) => acc + item.quantity * item.product.price,
+		0
+	);
+
+	return {
+		...cart,
+		size,
+		subtotal,
+	};
+}
