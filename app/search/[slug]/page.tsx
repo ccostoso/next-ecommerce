@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 import { Suspense } from "react";
 import { ProductsSkeleton } from "../../_components/ProductsSkeleton";
 import { notFound } from "next/navigation";
-import { ProductListServerWrapper } from "@/components/product-list-server-wrapper";
+import { ProductListServerWrapper } from "@/components/products-list-server-wrapper";
 
 type CategoryPageProps = {
 	params: Promise<{ slug: string }>;

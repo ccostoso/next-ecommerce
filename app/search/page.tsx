@@ -1,7 +1,7 @@
 import { BreadcrumbsItem, Breadcrumbs } from "@/components/breadcrumbs";
 import { Suspense } from "react";
 import { ProductsSkeleton } from "../_components/ProductsSkeleton";
-import { ProductListServerWrapper } from "@/components/product-list-server-wrapper";
+import { ProductsListServerWrapper } from "@/components/products-list-server-wrapper";
 
 type SearchPageProps = {
 	searchParams: Promise<{ query?: string; sort?: string }>;
@@ -25,7 +25,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 			<Breadcrumbs items={breadcrumbs} />
 
 			<Suspense key={`${query}-${sort}`} fallback={<ProductsSkeleton />}>
-				<ProductListServerWrapper params={{ query, sort }} />
+				<ProductsListServerWrapper params={{ query, sort }} />
 			</Suspense>
 		</>
 	);

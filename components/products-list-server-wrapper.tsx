@@ -1,14 +1,14 @@
 import { getProducts, GetProductsParams } from "@/lib/actions";
-import { ProductsList } from "./product-list";
+import { ProductsList } from "./products-list";
 import { sleep } from "@/lib/utils";
 
-type ProductListServerWrapperProps = {
+type ProductsListServerWrapperProps = {
 	params: GetProductsParams;
 };
 
-export async function ProductListServerWrapper({
+export async function ProductsListServerWrapper({
 	params,
-}: ProductListServerWrapperProps) {
+}: ProductsListServerWrapperProps) {
 	await sleep(1000);
 	const products = await getProducts(params);
 

@@ -10,7 +10,7 @@ import {
 import { Suspense } from "react";
 import { ProductsSkeleton } from "./_components/ProductsSkeleton";
 import { Breadcrumbs } from "@/components/breadcrumbs";
-import { ProductListServerWrapper } from "@/components/product-list-server-wrapper";
+import { ProductListServerWrapper } from "@/components/products-list-server-wrapper";
 
 const pageSize = 3;
 
