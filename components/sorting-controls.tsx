@@ -3,7 +3,6 @@
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
-import path from "path";
 
 export function SortingControls() {
 	const pathname = usePathname();
@@ -12,9 +11,6 @@ export function SortingControls() {
 
 	const createSortURL = (sortValue: string | null): string => {
 		const params = new URLSearchParams(searchParams.toString());
-
-		console.log("params:");
-		console.log(params.toString());
 
 		if (sortValue) {
 			params.set("sort", sortValue);
