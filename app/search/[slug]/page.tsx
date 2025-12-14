@@ -5,8 +5,6 @@ import prisma from "@/lib/prisma";
 import { Suspense } from "react";
 import { ProductsSkeleton } from "../../_components/ProductsSkeleton";
 import { notFound } from "next/navigation";
-import Link from "next/link";
-import { CategorySidebar } from "@/components/category-sidebar";
 
 type CategoryPageProps = {
 	params: Promise<{ slug: string }>;

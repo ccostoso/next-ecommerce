@@ -5,15 +5,20 @@ import prisma from "@/lib/prisma";
 import { Suspense } from "react";
 import { ProductsSkeleton } from "../_components/ProductsSkeleton";
 
-type SearchPageProps = {
-	searchParams: Promise<{ query?: string }>;
-};
-
 type ProductsProps = {
 	query: string;
+	sort?: string;
 };
 
-async function Products({ query }: ProductsProps) {
+async function Products({ query, sort }: ProductsProps) {
+	let orderBy: Record<string, "asc" | "desc"> | undefined = undefined;
+
+	if (sort === "price_asc") {
+		orderBy = { price: "asc" };
+	} else if (sort === "price_desc") {
+		orderBy = { price: "desc" };
+	}
+
 	const products = await prisma.product.findMany({
 		where: {
 			OR: [
@@ -31,6 +36,7 @@ async function Products({ query }: ProductsProps) {
 				},
 			],
 		},
+		...(orderBy ? { orderBy } : {}),
 		take: 18,
 	});
 
@@ -55,16 +61,20 @@ async function Products({ query }: ProductsProps) {
 	);
 }
 
+type SearchPageProps = {
+	searchParams: Promise<{ query?: string; sort?: string }>;
+};
+
 export default async function SearchPage({ searchParams }: SearchPageProps) {
-	const { query } = await searchParams;
-	const trimmed = query?.trim() ?? "";
+	const query = (await searchParams).query?.trim() ?? "";
+	const sort = (await searchParams).sort;
 
 	const breadcrumbs: BreadcrumbsItem[] = [{ label: "Products", href: "/" }];
 
-	trimmed &&
+	query &&
 		breadcrumbs.push({
-			label: `Results for "${trimmed}"`,
-			href: `/search?query=${encodeURIComponent(trimmed)}`,
+			label: `Results for "${query}"`,
+			href: `/search?query=${encodeURIComponent(query)}`,
 			active: true,
 		});
 
@@ -72,8 +82,8 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 		<>
 			<Breadcrumbs items={breadcrumbs} />
 
-			<Suspense key={query} fallback={<ProductsSkeleton />}>
-				<Products query={trimmed} />
+			<Suspense key={`${query}-${sort}`} fallback={<ProductsSkeleton />}>
+				<Products query={query} sort={sort} />
 			</Suspense>
 		</>
 	);
