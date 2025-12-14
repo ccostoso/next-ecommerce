@@ -1,4 +1,3 @@
-import { ProductCard } from "./_components/ProductCard";
 import prisma from "@/lib/prisma";
 import {
 	Pagination,
@@ -10,39 +9,14 @@ import {
 } from "@/components/ui/pagination";
 import { Suspense } from "react";
 import { ProductsSkeleton } from "./_components/ProductsSkeleton";
-import { sleep } from "@/lib/utils";
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import { ProductsListServerWrapper } from "@/components/products-list-server-wrapper";
 
 const pageSize = 3;
 
 type HomePageProps = {
 	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
-
-type ProductsProps = {
-	page: number;
-};
-
-async function Products({ page }: ProductsProps) {
-	const skip = (page - 1) * pageSize;
-
-	const products = await prisma.product.findMany({
-		skip,
-		take: pageSize,
-	});
-
-	await sleep(1000);
-
-	return (
-		<>
-			<section className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-				{products.map((product) => (
-					<ProductCard key={product.id} product={product} />
-				))}
-			</section>
-		</>
-	);
-}
 
 export default async function HomePage({ searchParams }: HomePageProps) {
 	const { page: pageParam } = await searchParams;
@@ -57,7 +31,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
 				items={[{ label: "Products", href: "/", active: true }]}
 			/>
 			<Suspense key={page} fallback={<ProductsSkeleton />}>
-				<Products page={page} />
+				<ProductsListServerWrapper params={{ page, pageSize }} />
 			</Suspense>
 
 			<Pagination className="mt-8">

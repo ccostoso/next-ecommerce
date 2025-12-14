@@ -46,7 +46,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 		{ label: "Products", href: "/", active: false },
 		{
 			label: product.category.name,
-			href: `/category/${product.category?.slug}`,
+			href: `/search/${product.category?.slug}`,
 			active: false,
 		},
 		{ label: product.name, href: `/product/${product.slug}`, active: true },
