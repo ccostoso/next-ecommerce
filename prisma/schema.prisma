@@ -47,6 +47,10 @@ model CartItem {
 	// Ensure one product per cart item. 
 	// Quantity is already tracked by `quantity` field.
 	@@unique([cartId, productId])
+
+	// Indexes for faster lookups
+	// Indexing cart allows for efficient fetching of all items within a specific cart
+	// Indexing product allows for quick retrieval of all cart items containing a specific product
 	@@index([cartId])
 	@@index([productId])
 }
