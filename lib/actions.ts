@@ -81,7 +81,7 @@ export async function getProductBySlug(slug: string) {
 	return product;
 }
 
-export type CartWithProducts = Prisma.CartGetPayload<{
+export type ProductsCart = Prisma.CartGetPayload<{
 	include: {
 		items: {
 			include: {
@@ -91,12 +91,12 @@ export type CartWithProducts = Prisma.CartGetPayload<{
 	};
 }>;
 
-export type ShoppingCart = CartWithProducts & {
+export type QuantifiedProductsCart = ProductsCart & {
 	size: number;
 	subtotal: number;
 };
 
-export async function getCart(): Promise<ShoppingCart | null> {
+async function findCartFromCookies(): Promise<ProductsCart | null> {
 	const cartId = (await cookies()).get("cartId")?.value;
 
 	if (!cartId) return null;
@@ -114,6 +114,14 @@ export async function getCart(): Promise<ShoppingCart | null> {
 
 	if (!cart) return null;
 
+	return cart;
+}
+
+export async function getQuantifiedProductsCart(): Promise<QuantifiedProductsCart | null> {
+	const cart = await findCartFromCookies();
+
+	if (!cart) return null;
+
 	// Calculate size and subtotal
 	const size = cart.items.reduce((acc, item) => acc + item.quantity, 0);
 	const subtotal = cart.items.reduce(
@@ -126,4 +134,70 @@ export async function getCart(): Promise<ShoppingCart | null> {
 		size,
 		subtotal,
 	};
+}
+
+async function getOrCreateProductsCart(): Promise<ProductsCart> {
+	let cart = await findCartFromCookies();
+
+	if (cart) return cart;
+
+	cart = await prisma.cart.create({
+		data: {},
+		include: {
+			items: {
+				include: {
+					product: true,
+				},
+			},
+		},
+	});
+
+	(await cookies()).set("cartId", cart.id, {
+		httpOnly: true,
+		secure: process.env.NODE_ENV === "production",
+		sameSite: "lax",
+	});
+
+	return cart;
+}
+
+export async function addProductToProductsCart(
+	productId: string,
+	quantity: number = 1
+) {
+	if (quantity < 1) {
+		throw new Error("Quantity must be at least 1");
+	}
+
+	const cart = await getOrCreateProductsCart();
+
+	// Check if the product is already in the cart
+	let cartItem = cart.items.find((item) => item.productId === productId);
+
+	if (cartItem) {
+		// Update quantity if it exists
+		cartItem = await prisma.cartItem.update({
+			where: { id: cartItem.id },
+			data: {
+				quantity: cartItem.quantity + quantity,
+			},
+			include: {
+				product: true,
+			},
+		});
+	} else {
+		// Create new cart item if it doesn't exist
+		cartItem = await prisma.cartItem.create({
+			data: {
+				cartId: cart.id,
+				productId,
+				quantity,
+			},
+			include: {
+				product: true,
+			},
+		});
+	}
+
+	// Revalidate pages
 }
