@@ -10,7 +10,7 @@ import {
 import { Suspense } from "react";
 import { ProductsSkeleton } from "./_components/ProductsSkeleton";
 import { Breadcrumbs } from "@/components/breadcrumbs";
-import { ProductListServerWrapper } from "@/components/products-list-server-wrapper";
+import { ProductsListServerWrapper } from "@/components/products-list-server-wrapper";
 
 const pageSize = 3;
 
@@ -31,7 +31,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
 				items={[{ label: "Products", href: "/", active: true }]}
 			/>
 			<Suspense key={page} fallback={<ProductsSkeleton />}>
-				<ProductListServerWrapper params={{ page, pageSize }} />
+				<ProductsListServerWrapper params={{ page, pageSize }} />
 			</Suspense>
 
 			<Pagination className="mt-8">

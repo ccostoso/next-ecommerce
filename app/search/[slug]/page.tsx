@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 import { Suspense } from "react";
 import { ProductsSkeleton } from "../../_components/ProductsSkeleton";
 import { notFound } from "next/navigation";
-import { ProductListServerWrapper } from "@/components/products-list-server-wrapper";
+import { ProductsListServerWrapper } from "@/components/products-list-server-wrapper";
 
 type CategoryPageProps = {
 	params: Promise<{ slug: string }>;
@@ -40,7 +40,7 @@ export default async function CategoryPage({
 			<Breadcrumbs items={breadcrumbs} />
 
 			<Suspense key={`${slug}-${sort}`} fallback={<ProductsSkeleton />}>
-				<ProductListServerWrapper
+				<ProductsListServerWrapper
 					params={{ categorySlug: slug, sort }}
 				/>
 			</Suspense>
