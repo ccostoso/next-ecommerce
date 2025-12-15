@@ -1,9 +1,12 @@
 import Link from "next/link";
 import { ModeToggle } from "./mode-toggle";
 import { Button } from "@/components/ui/button";
-import { Search, ShoppingCart } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 import { MobileNav } from "./mobile-nav";
 import { SearchInput } from "./search-input";
+import { CartIndicator } from "./cart-indicator";
+import { Suspense } from "react";
+import { CartIndicatorSkeleton } from "./cart-indicator-skeleton";
 
 export const categories = [
 	{ id: 1, name: "Electronics", href: "/search/electronics" },
@@ -53,11 +56,9 @@ export function Navbar() {
 				{/* Action Buttons */}
 				{/* Won't shrink because of `.shrink-0` */}
 				<div className="flex items-center gap-0 shrink-0">
-					<Button variant="ghost" size="icon" asChild>
-						<Link href="/cart">
-							<ShoppingCart />
-						</Link>
-					</Button>
+					<Suspense fallback={<CartIndicatorSkeleton />}>
+						<CartIndicator />
+					</Suspense>
 
 					<ModeToggle />
 				</div>

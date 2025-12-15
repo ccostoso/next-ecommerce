@@ -5,9 +5,8 @@ import { getProductBySlug } from "@/lib/actions";
 import { formatPrice, sleep } from "@/lib/utils";
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { ShoppingCart } from "lucide-react";
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import { AddToCartButton } from "./_components/AddToCartButton";
 
 type ProductPageProps = {
 	params: Promise<{
@@ -118,15 +117,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 						</div>
 
 						<Separator className="my-4" />
-						<Button
-							disabled={product.inventory === 0}
-							className="w-full mt-4 hover:bg-primary/70"
-						>
-							<ShoppingCart className="mr-1 w-4 h-4" />
-							{product.inventory > 0
-								? "Add to Cart"
-								: "Notify Me"}
-						</Button>
+						<AddToCartButton product={product} />
 					</div>
 				</CardContent>
 			</Card>

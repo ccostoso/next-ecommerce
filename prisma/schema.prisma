@@ -17,6 +17,7 @@ model Product {
     category    Category @relation(fields: [categoryId], references: [id])
   	categoryId  String
 	inventory 	Int		 @default(0)
+	cartItems 	CartItem[]
 }
 
 model Category {
@@ -24,4 +25,32 @@ model Category {
 	name        String
 	slug        String   @unique
 	products    Product[]
+}
+
+model Cart {
+	id          String   @id @default(cuid())
+	items       CartItem[]
+	createdAt   DateTime @default(now())
+	updatedAt   DateTime @updatedAt
+}
+
+model CartItem {
+	id          String   @id @default(cuid())
+	cart        Cart     @relation(fields: [cartId], references: [id])
+	cartId      String
+	product     Product  @relation(fields: [productId], references: [id])
+	productId   String
+	quantity    Int
+	createdAt   DateTime @default(now())
+	updatedAt   DateTime @updatedAt
+	
+	// Ensure one product per cart item. 
+	// Quantity is already tracked by `quantity` field.
+	@@unique([cartId, productId])
+
+	// Indexes for faster lookups
+	// Indexing cart allows for efficient fetching of all items within a specific cart
+	// Indexing product allows for quick retrieval of all cart items containing a specific product
+	@@index([cartId])
+	@@index([productId])
 }
