@@ -82,6 +82,7 @@ export async function getProductBySlug(slug: string) {
 	return product;
 }
 
+// ProductsCart type includes cart items with their associated products
 export type ProductsCart = Prisma.CartGetPayload<{
 	include: {
 		items: {
@@ -92,11 +93,20 @@ export type ProductsCart = Prisma.CartGetPayload<{
 	};
 }>;
 
+// QuantifiedProductsCart extends ProductsCart with additional properties for size and subtotal
 export type QuantifiedProductsCart = ProductsCart & {
 	size: number;
 	subtotal: number;
 };
 
+// ProductsCartItem type includes the associated product for each cart item
+export type ProductsCartItem = Prisma.CartItemGetPayload<{
+	include: {
+		product: true;
+	};
+}>;
+
+// Helper function to find cart from cookies
 async function findCartFromCookies(): Promise<ProductsCart | null> {
 	const cartId = (await cookies()).get("cartId")?.value;
 
@@ -122,6 +132,7 @@ async function findCartFromCookies(): Promise<ProductsCart | null> {
 	)(cartId);
 }
 
+// Function to get the cart with size and subtotal calculations
 export async function getQuantifiedProductsCart(): Promise<QuantifiedProductsCart | null> {
 	const cart = await findCartFromCookies();
 
@@ -141,6 +152,7 @@ export async function getQuantifiedProductsCart(): Promise<QuantifiedProductsCar
 	};
 }
 
+// Helper function to get or create a products cart
 async function getOrCreateProductsCart(): Promise<ProductsCart> {
 	let cart = await findCartFromCookies();
 
@@ -166,6 +178,7 @@ async function getOrCreateProductsCart(): Promise<ProductsCart> {
 	return cart;
 }
 
+// Function to add a product to the products cart
 export async function addProductToProductsCart(
 	productId: string,
 	quantity: number = 1
