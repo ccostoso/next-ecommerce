@@ -1,3 +1,4 @@
+import { CartEntry } from "@/components/cart-entry";
 import { getQuantifiedProductsCart } from "@/lib/actions";
 import { formatPrice } from "@/lib/utils";
 
@@ -17,31 +18,11 @@ export default async function CartPage() {
 					</p>
 				</div>
 			) : (
-				<div className="space-y-4">
+				<ul className="flex flex-col">
 					{cart.items.map((item) => (
-						<div
-							key={item.id}
-							className="flex items-center justify-between border-b pb-4"
-						>
-							<div>
-								<h2 className="text-lg font-medium">
-									{item.product.name}
-								</h2>
-								<p className="text-sm text-muted-foreground">
-									{item.product.description}
-								</p>
-							</div>
-							<div>
-								<p className="text-lg font-bold">
-									Price: {formatPrice(item.product.price)}
-								</p>
-							</div>
-						</div>
+						<CartEntry key={item.id} cartItem={item} />
 					))}
-					<div className="text-right font-bold text-xl">
-						Total: ${cart.subtotal.toFixed(2)}
-					</div>
-				</div>
+				</ul>
 			)}
 		</main>
 	);
