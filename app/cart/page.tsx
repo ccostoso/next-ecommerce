@@ -1,6 +1,6 @@
-import { CartEntry } from "@/components/cart-entry";
+import { CartEntry } from "@/app/cart/_components/cart-entry";
 import { getQuantifiedProductsCart } from "@/lib/actions";
-import { formatPrice } from "@/lib/utils";
+import CartSummary from "./_components/cart-summary";
 
 export default async function CartPage() {
 	const cart = await getQuantifiedProductsCart();
@@ -18,11 +18,14 @@ export default async function CartPage() {
 					</p>
 				</div>
 			) : (
-				<ul className="flex flex-col">
-					{cart.items.map((item) => (
-						<CartEntry key={item.id} cartItem={item} />
-					))}
-				</ul>
+				<>
+					<ul className="flex flex-col">
+						{cart.items.map((item) => (
+							<CartEntry key={item.id} cartItem={item} />
+						))}
+					</ul>
+					<CartSummary />
+				</>
 			)}
 		</main>
 	);

@@ -3,7 +3,7 @@
 import { ProductsCartItem, setProductsCartItemQuantity } from "@/lib/actions";
 import { formatPrice } from "@/lib/utils";
 import Image from "next/image";
-import { Button } from "./ui/button";
+import { Button } from "../../../components/ui/button";
 import { Minus, Plus, X } from "lucide-react";
 import { useState } from "react";
 
