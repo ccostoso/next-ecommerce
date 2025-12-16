@@ -3,7 +3,7 @@
 import { Prisma } from "@/app/generated/prisma/client";
 import { prisma } from "./prisma";
 import { cookies } from "next/headers";
-import { revalidateTag, unstable_cache, updateTag } from "next/cache";
+import { unstable_cache, updateTag } from "next/cache";
 
 export type GetProductsParams = {
 	query?: string;
@@ -219,4 +219,50 @@ export async function addProductToProductsCart(
 
 	// Revalidate pages
 	updateTag(`cart-${cart.id}`);
+}
+
+export async function setProductsCartItemQuantity(
+	productId: string,
+	quantity: number
+) {
+	if (quantity < 0) {
+		throw new Error("Quantity cannot be negative");
+	}
+
+	const cart = await findCartFromCookies();
+
+	if (!cart) {
+		throw new Error("No cart found");
+	}
+
+	// TODO: Ensure product inventory is sufficient
+
+	try {
+		if (quantity === 0) {
+			// Remove item from cart entirely if quantity is set to 0
+			await prisma.cartItem.deleteMany({
+				where: {
+					cartId: cart.id,
+					productId,
+				},
+			});
+
+			// Update cache tag to refresh cart quantity icon
+			updateTag(`cart-${cart.id}`);
+		} else {
+			// Update the quantity of the cart item
+			await prisma.cartItem.updateMany({
+				where: {
+					cartId: cart.id,
+					productId,
+				},
+				data: {
+					quantity,
+				},
+			});
+		}
+	} catch (error) {
+		console.error("Error updating cart item quantity:", error);
+		throw new Error("Failed to update cart item quantity");
+	}
 }

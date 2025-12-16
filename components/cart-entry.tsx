@@ -12,14 +12,13 @@ export function CartEntry({ cartItem }: CartEntryProps) {
 	return (
 		<li className="border-b border-muted flex py-4 justify-between">
 			<div className="flex gap-4">
-				<div className="relative w-16 h-16 overflow-hidden rounded-md border border-muted flex-shrink-0">
+				<div className="relative w-16 h-16 overflow-hidden rounded-md border border-muted shrink-0 bg-muted">
 					<Image
 						className="object-cover"
 						src={cartItem.product.image}
 						alt={cartItem.product.name}
 						fill
-						sizes="128px"
-						priority
+						sizes="64px"
 					/>
 				</div>
 				<div className="flex flex-col">
