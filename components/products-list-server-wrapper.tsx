@@ -9,7 +9,7 @@ type ProductsListServerWrapperProps = {
 export async function ProductsListServerWrapper({
 	params,
 }: ProductsListServerWrapperProps) {
-	await sleep(1000);
+	// await sleep(1000);
 	const products = await getProducts(params);
 
 	return <ProductsList products={products} />;

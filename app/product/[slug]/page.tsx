@@ -51,7 +51,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 		{ label: product.name, href: `/product/${product.slug}`, active: true },
 	];
 
-	await sleep(1000);
+	// await sleep(1000);
 
 	return (
 		<main className="container mx-auto p-4">

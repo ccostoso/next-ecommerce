@@ -29,7 +29,6 @@ async function main() {
 
 	const products: Prisma.ProductCreateInput[] = [
 		{
-			id: "1",
 			name: "Wireless Headphones",
 			description:
 				"Premium noise-cancelling wireless headphones with long battery life.",
@@ -42,7 +41,6 @@ async function main() {
 			inventory: 50,
 		},
 		{
-			id: "2",
 			name: "Smart Watch",
 			description:
 				"Fitness tracker with heart rate monitoring and sleep analysis.",
@@ -55,7 +53,6 @@ async function main() {
 			inventory: 30,
 		},
 		{
-			id: "3",
 			name: "Running Shoes",
 			description:
 				"Lightweight running shoes with responsive cushioning.",
@@ -68,7 +65,6 @@ async function main() {
 			inventory: 100,
 		},
 		{
-			id: "4",
 			name: "Ceramic Mug",
 			description: "Handcrafted ceramic mug with minimalist design.",
 			price: 24.99,
@@ -80,7 +76,6 @@ async function main() {
 			inventory: 0,
 		},
 		{
-			id: "5",
 			name: "Leather Backpack",
 			description: "Durable leather backpack with multiple compartments.",
 			price: 79.99,

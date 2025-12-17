@@ -5,7 +5,7 @@ import { ShoppingCart } from "lucide-react";
 export async function CartIndicatorSkeleton() {
 	return (
 		<Button
-			className="relative opacity-50 cursor-wait"
+			className="relative animate-pulse cursor-wait"
 			variant="ghost"
 			size="icon"
 			asChild

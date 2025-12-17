@@ -3,7 +3,8 @@
 import { Prisma } from "@/app/generated/prisma/client";
 import { prisma } from "./prisma";
 import { cookies } from "next/headers";
-import { revalidateTag, unstable_cache, updateTag } from "next/cache";
+import { unstable_cache, updateTag } from "next/cache";
+import { create } from "domain";
 
 export type GetProductsParams = {
 	query?: string;
@@ -82,6 +83,7 @@ export async function getProductBySlug(slug: string) {
 	return product;
 }
 
+// ProductsCart type includes cart items with their associated products
 export type ProductsCart = Prisma.CartGetPayload<{
 	include: {
 		items: {
@@ -92,11 +94,20 @@ export type ProductsCart = Prisma.CartGetPayload<{
 	};
 }>;
 
+// QuantifiedProductsCart extends ProductsCart with additional properties for size and subtotal
 export type QuantifiedProductsCart = ProductsCart & {
 	size: number;
 	subtotal: number;
 };
 
+// ProductsCartItem type includes the associated product for each cart item
+export type ProductsCartItem = Prisma.CartItemGetPayload<{
+	include: {
+		product: true;
+	};
+}>;
+
+// Helper function to find cart from cookies
 async function findCartFromCookies(): Promise<ProductsCart | null> {
 	const cartId = (await cookies()).get("cartId")?.value;
 
@@ -111,6 +122,9 @@ async function findCartFromCookies(): Promise<ProductsCart | null> {
 						include: {
 							product: true,
 						},
+						orderBy: {
+							createdAt: "desc",
+						},
 					},
 				},
 			});
@@ -122,6 +136,7 @@ async function findCartFromCookies(): Promise<ProductsCart | null> {
 	)(cartId);
 }
 
+// Function to get the cart with size and subtotal calculations
 export async function getQuantifiedProductsCart(): Promise<QuantifiedProductsCart | null> {
 	const cart = await findCartFromCookies();
 
@@ -141,6 +156,7 @@ export async function getQuantifiedProductsCart(): Promise<QuantifiedProductsCar
 	};
 }
 
+// Helper function to get or create a products cart
 async function getOrCreateProductsCart(): Promise<ProductsCart> {
 	let cart = await findCartFromCookies();
 
@@ -166,6 +182,7 @@ async function getOrCreateProductsCart(): Promise<ProductsCart> {
 	return cart;
 }
 
+// Function to add a product to the products cart
 export async function addProductToProductsCart(
 	productId: string,
 	quantity: number = 1
@@ -206,4 +223,56 @@ export async function addProductToProductsCart(
 
 	// Revalidate pages
 	updateTag(`cart-${cart.id}`);
+}
+
+export async function setProductsCartItemQuantity(
+	productId: string,
+	quantity: number
+) {
+	if (quantity < 0) {
+		throw new Error("Quantity cannot be negative");
+	}
+
+	const cart = await findCartFromCookies();
+
+	if (!cart) {
+		throw new Error("No cart found");
+	}
+
+	// TODO: Ensure product inventory is sufficient
+
+	try {
+		if (quantity === 0) {
+			// Remove item from cart entirely if quantity is set to 0
+			await prisma.cartItem.deleteMany({
+				where: {
+					cartId: cart.id,
+					productId,
+				},
+			});
+
+			// Update cache tag to refresh cart quantity icon
+			updateTag(`cart-${cart.id}`);
+		} else {
+			console.log("Updating quantity to", quantity);
+			console.log("For cartID", cart.id, "and productId", productId);
+			// Update the quantity of the cart item
+			const result = await prisma.cartItem.updateMany({
+				where: {
+					cartId: cart.id,
+					productId,
+				},
+				data: {
+					quantity,
+				},
+			});
+			console.log(result);
+		}
+
+		// Revalidate pages
+		updateTag(`cart-${cart.id}`);
+	} catch (error) {
+		console.error("Error updating cart item quantity:", error);
+		throw new Error("Failed to update cart item quantity");
+	}
 }
