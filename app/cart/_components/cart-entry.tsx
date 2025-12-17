@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Button } from "../../../components/ui/button";
 import { Minus, Plus, X } from "lucide-react";
 import { useState } from "react";
+import Link from "next/link";
 
 type CartEntryProps = {
 	cartItem: ProductsCartItem;
@@ -52,7 +53,9 @@ export function CartEntry({ cartItem, index }: CartEntryProps) {
 					/>
 				</div>
 				<div className="flex flex-col">
-					<h2 className="font-medium">{cartItem.product.name}</h2>
+					<Link href={`/product/${cartItem.product.slug}`}>
+						<h2 className="font-medium">{cartItem.product.name}</h2>
+					</Link>
 				</div>
 			</div>
 
