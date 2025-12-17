@@ -30,7 +30,7 @@ export default async function CartSummary() {
 					<p className="">Calculated at checkout</p>
 				</div>
 
-				<div className="flex items-center justify-between py-1 my-1">
+				<div className="flex items-center justify-between py-1 my-1 border-b border-muted">
 					<p>Shipping:</p>
 					<p className="">Calculated at checkout</p>
 				</div>

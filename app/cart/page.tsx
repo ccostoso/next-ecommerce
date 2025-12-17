@@ -1,9 +1,12 @@
 import { CartEntry } from "@/app/cart/_components/cart-entry";
 import { getQuantifiedProductsCart } from "@/lib/actions";
 import CartSummary from "./_components/cart-summary";
+import { sleep } from "@/lib/utils";
 
 export default async function CartPage() {
 	const cart = await getQuantifiedProductsCart();
+
+	await sleep(1000); // Simulate loading delay
 
 	return (
 		<main className="container mx-auto p-4">
@@ -20,8 +23,12 @@ export default async function CartPage() {
 			) : (
 				<>
 					<ul className="flex flex-col">
-						{cart.items.map((item) => (
-							<CartEntry key={item.id} cartItem={item} />
+						{cart.items.map((item, index) => (
+							<CartEntry
+								key={item.id}
+								cartItem={item}
+								index={index}
+							/>
 						))}
 					</ul>
 					<CartSummary />

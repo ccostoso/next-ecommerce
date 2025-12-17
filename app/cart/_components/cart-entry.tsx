@@ -9,9 +9,10 @@ import { useState } from "react";
 
 type CartEntryProps = {
 	cartItem: ProductsCartItem;
+	index: number;
 };
 
-export function CartEntry({ cartItem }: CartEntryProps) {
+export function CartEntry({ cartItem, index }: CartEntryProps) {
 	const [isLoading, setIsLoading] = useState(false);
 
 	const handleSetProductQuantity = async (quantity: number) => {
@@ -41,13 +42,13 @@ export function CartEntry({ cartItem }: CartEntryProps) {
 					</Button>
 				</div>
 
-				<div className="relative w-16 h-16 overflow-hidden rounded-md border border-muted shrink-0 bg-muted">
+				<div className="relative w-16 h-16 overflow-hidden rounded-md border border-muted shrink-0 bg-muted aspect-square">
 					<Image
-						className="object-cover"
 						src={cartItem.product.image}
 						alt={cartItem.product.name}
 						fill
 						sizes="64px"
+						className="object-cover"
 					/>
 				</div>
 				<div className="flex flex-col">
