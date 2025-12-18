@@ -44,13 +44,15 @@ export function CartEntry({ cartItem, index }: CartEntryProps) {
 				</div>
 
 				<div className="relative w-16 h-16 overflow-hidden rounded-md border border-muted shrink-0 bg-muted aspect-square">
-					<Image
-						src={cartItem.product.image}
-						alt={cartItem.product.name}
-						fill
-						sizes="64px"
-						className="object-cover"
-					/>
+					{cartItem.product.image && (
+						<Image
+							src={cartItem.product.image!}
+							alt={cartItem.product.name}
+							fill
+							sizes="64px"
+							className="object-cover"
+						/>
+					)}
 				</div>
 				<div className="flex flex-col">
 					<Link href={`/product/${cartItem.product.slug}`}>
