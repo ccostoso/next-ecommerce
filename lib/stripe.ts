@@ -1,3 +1,4 @@
+import { Prisma } from "@/app/generated/prisma/client";
 import Stripe from "stripe";
 
 if (!process.env.STRIPE_SECRET_KEY) {
@@ -10,3 +11,13 @@ export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
 	apiVersion: "2025-12-15.clover",
 	typescript: true,
 });
+
+export type ItemsProductsOrder = Prisma.OrderGetPayload<{
+	include: {
+		items: {
+			include: {
+				product: true;
+			};
+		};
+	};
+}>;
