@@ -4,7 +4,6 @@ import { Prisma } from "@/app/generated/prisma/client";
 import { prisma } from "./prisma";
 import { cookies } from "next/headers";
 import { unstable_cache, updateTag } from "next/cache";
-import { create } from "domain";
 
 export type GetProductsParams = {
 	query?: string;

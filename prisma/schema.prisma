@@ -18,6 +18,7 @@ model Product {
   	categoryId  String
 	inventory 	Int		 @default(0)
 	cartItems 	CartItem[]
+	orderItems 	OrderItem[]
 }
 
 model Category {
@@ -52,5 +53,31 @@ model CartItem {
 	// Indexing cart allows for efficient fetching of all items within a specific cart
 	// Indexing product allows for quick retrieval of all cart items containing a specific product
 	@@index([cartId])
+	@@index([productId])
+}
+
+model Order {
+	id          			String   	@id @default(cuid())
+	totalAmount 			Float
+	status 					String	 	@default("PENDING")
+	items       			OrderItem[]
+	stripeSessionId 		String?  	@unique
+	stripePaymentIntentId 	String?  	@unique
+	createdAt   			DateTime 	@default(now())
+	updatedAt   			DateTime 	@updatedAt
+}
+
+model OrderItem {
+	id          String   @id @default(cuid())
+	order       Order    @relation(fields: [orderId], references: [id])
+	orderId     String
+	product     Product  @relation(fields: [productId], references: [id])
+	productId   String
+	quantity    Int		 @default(1)
+	price 		Float
+	createdAt   DateTime @default(now())
+	updatedAt   DateTime @updatedAt
+
+	@@index([orderId])
 	@@index([productId])
 }

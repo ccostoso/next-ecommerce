@@ -11,6 +11,7 @@ import { Suspense } from "react";
 import { ProductsSkeleton } from "./_components/ProductsSkeleton";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { ProductsListServerWrapper } from "@/components/products-list-server-wrapper";
+import { stripe } from "@/lib/stripe";
 
 const pageSize = 3;
 
@@ -24,6 +25,8 @@ export default async function HomePage({ searchParams }: HomePageProps) {
 
 	const total = await prisma.product.count();
 	const totalPages = Math.ceil(total / pageSize);
+
+	console.log(await stripe.events.list({ limit: 1 }));
 
 	return (
 		<main className="container mx-auto p-4">
