@@ -83,12 +83,12 @@ export async function processCheckout(): Promise<ProcessCheckoutResponse> {
 		if (!sessionId || !sessionUrl)
 			throw new Error("Failed to create Stripe checkout session");
 
-		// Store Stripe session IDs in the order and change order status to 'PROCESSING'
+		// Store Stripe session IDs in the order and change order status to 'PENDING_PAYMENT'
 		await prisma.order.update({
 			where: { id: fullOrder.id },
 			data: {
 				stripeSessionId: sessionId,
-				status: "PROCESSING",
+				status: "PENDING_PAYMENT",
 			},
 		});
 
