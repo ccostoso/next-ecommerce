@@ -1,12 +1,27 @@
 import { CartEntry } from "@/app/cart/_components/cart-entry";
 import { getQuantifiedProductsCart } from "@/lib/actions";
 import CartSummary from "./_components/cart-summary";
-import { sleep } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { processCheckout } from "@/lib/orders";
+import { redirect } from "next/navigation";
+import { ProcessCheckoutResponse } from "@/lib/orders";
 
 export default async function CartPage() {
 	const cart = await getQuantifiedProductsCart();
 
-	await sleep(1000); // Simulate loading delay
+	const handleCheckout = async () => {
+		"use server";
+
+		let result: ProcessCheckoutResponse | null = null;
+
+		try {
+			result = await processCheckout();
+		} catch (error) {
+			console.error("Checkout failed:", error);
+		}
+
+		if (result) redirect(result.sessionUrl);
+	};
 
 	return (
 		<main className="container mx-auto p-4">
@@ -31,7 +46,14 @@ export default async function CartPage() {
 							/>
 						))}
 					</ul>
+
 					<CartSummary />
+
+					<form action={handleCheckout}>
+						<Button size="lg" className="w-full mt-4">
+							Proceed to Checkout
+						</Button>
+					</form>
 				</>
 			)}
 		</main>
