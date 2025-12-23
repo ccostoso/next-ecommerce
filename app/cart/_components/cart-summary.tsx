@@ -1,7 +1,5 @@
-import { Button } from "@/components/ui/button";
 import { getQuantifiedProductsCart } from "@/lib/actions";
 import { formatPrice } from "@/lib/utils";
-import Link from "next/link";
 
 export default async function CartSummary() {
 	const cart = await getQuantifiedProductsCart();
@@ -42,10 +40,6 @@ export default async function CartSummary() {
 					</p>
 				</div>
 			</div>
-
-			<Button size="lg" className="w-full mt-4" asChild>
-				<Link href="/checkout">Proceed to Checkout</Link>
-			</Button>
 		</div>
 	);
 }

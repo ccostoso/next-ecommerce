@@ -3,9 +3,14 @@
 import { cookies } from "next/headers";
 import { getQuantifiedProductsCart } from "./actions";
 import prisma from "./prisma";
-import { createCheckoutSession } from "./stripe";
+import { createCheckoutSession, ItemsProductsOrder } from "./stripe";
 
-export async function processCheckout() {
+export type ProcessCheckoutResponse = {
+	sessionUrl: string;
+	order: ItemsProductsOrder;
+};
+
+export async function processCheckout(): Promise<ProcessCheckoutResponse> {
 	const cart = await getQuantifiedProductsCart();
 
 	if (!cart || cart.size === 0) {
@@ -15,6 +20,7 @@ export async function processCheckout() {
 	let orderId: string | null = null;
 
 	try {
+		// We use a transaction to ensure data integrity
 		const order = prisma.$transaction(async (tx) => {
 			// Calculate total price
 			const total = cart.subtotal;
@@ -77,12 +83,12 @@ export async function processCheckout() {
 		if (!sessionId || !sessionUrl)
 			throw new Error("Failed to create Stripe checkout session");
 
-		// Store Stripe session IDs in the order and change order status to 'PROCESSING'
+		// Store Stripe session IDs in the order and change order status to 'PENDING_PAYMENT'
 		await prisma.order.update({
 			where: { id: fullOrder.id },
 			data: {
 				stripeSessionId: sessionId,
-				status: "PROCESSING",
+				status: "PENDING_PAYMENT",
 			},
 		});
 
@@ -90,7 +96,10 @@ export async function processCheckout() {
 		(await cookies()).delete("cartId");
 
 		// Return the order
-		return order;
+		return {
+			sessionUrl,
+			order: fullOrder,
+		};
 	} catch (error) {
 		if (
 			orderId &&
