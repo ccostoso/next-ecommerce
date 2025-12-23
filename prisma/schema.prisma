@@ -87,7 +87,14 @@ model User {
 	email       String   @unique
 	password    String
 	name 	  	String?
-	role		String   @default("USER")
+	userRole    UserRole @relation(fields: [roleId], references: [id])
+	roleId      String
 	createdAt   DateTime @default(now())
 	updatedAt   DateTime @updatedAt
+}
+
+model UserRole {
+	id    String @id @default(cuid())
+	name  String @unique
+	users User[]
 }

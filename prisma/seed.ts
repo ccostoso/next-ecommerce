@@ -1,10 +1,18 @@
 import "dotenv/config";
 import { Prisma } from "@/app/generated/prisma/client";
 import prisma from "@/lib/prisma";
+import { hashPassword } from "@/lib/auth";
 
 async function main() {
+	// Delete in reverse dependency order (children before parents)
+	await prisma.cartItem.deleteMany();
+	await prisma.orderItem.deleteMany();
+	await prisma.cart.deleteMany();
+	await prisma.order.deleteMany();
 	await prisma.product.deleteMany();
 	await prisma.category.deleteMany();
+	await prisma.user.deleteMany();
+	await prisma.userRole.deleteMany();
 
 	const electronics = await prisma.category.create({
 		data: {
@@ -93,6 +101,51 @@ async function main() {
 			data: product,
 		});
 	}
+
+	// Create user roles first
+	const adminRole = await prisma.userRole.create({
+		data: { name: "ADMIN" },
+	});
+
+	const userRole = await prisma.userRole.create({
+		data: { name: "USER" },
+	});
+
+	// Now create users using the role IDs
+	const users: Prisma.UserCreateInput[] = [
+		{
+			email: "admin@example.com",
+			password: "adminpassword",
+			name: "Admin User",
+			userRole: {
+				connect: { id: adminRole.id },
+			},
+			createdAt: new Date(),
+			updatedAt: new Date(),
+		},
+		{
+			email: "user@example.com",
+			password: "userpassword",
+			name: "Regular User",
+			userRole: {
+				connect: { id: userRole.id },
+			},
+			createdAt: new Date(),
+			updatedAt: new Date(),
+		},
+	];
+
+	for (const user of users) {
+		const hashedPassword = await hashPassword(user.password);
+		await prisma.user.create({
+			data: {
+				...user,
+				password: hashedPassword,
+			},
+		});
+	}
+
+	console.log("Users seeded successfully.");
 }
 
 main()
