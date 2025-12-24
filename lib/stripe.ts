@@ -1,4 +1,4 @@
-import { Prisma } from "@/app/generated/prisma/client";
+import { Prisma } from "@/lib/generated/prisma/client";
 import Stripe from "stripe";
 
 if (!process.env.STRIPE_SECRET_KEY) {

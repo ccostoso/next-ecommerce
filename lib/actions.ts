@@ -1,6 +1,6 @@
 "use server";
 
-import { Prisma } from "@/app/generated/prisma/client";
+import { Prisma } from "@/lib/generated/prisma/client";
 import { prisma } from "./prisma";
 import { cookies } from "next/headers";
 import { unstable_cache, updateTag } from "next/cache";

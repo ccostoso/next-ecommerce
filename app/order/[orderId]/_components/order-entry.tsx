@@ -1,7 +1,7 @@
 import { formatPrice } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
-import { Prisma } from "@/app/generated/prisma/client";
+import { Prisma } from "@/lib/generated/prisma/client";
 
 type OrderEntryProps = {
 	orderItem: Prisma.OrderItemGetPayload<{
