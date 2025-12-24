@@ -1,3 +1,5 @@
+"use client";
+
 import {
 	Card,
 	CardContent,
@@ -9,8 +11,24 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
+import { useForm } from "react-hook-form";
+import { SigninSchemaType } from "@/lib/schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SigninSchema } from "@/lib/schemas";
 
 export default function SignInPage() {
+	const form = useForm<SigninSchemaType>({
+		resolver: zodResolver(SigninSchema),
+		defaultValues: {
+			email: "",
+			password: "",
+		},
+	});
+
+	const onSubmit = (data: SigninSchemaType) => {
+		console.log("Form submitted:", data);
+	};
+
 	return (
 		<main className="flex min-h-screen flex-col items-center justify-center container mx-auto p-4">
 			<Card className="w-full max-w-md p-6">
