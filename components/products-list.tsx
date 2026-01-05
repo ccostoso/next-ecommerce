@@ -1,5 +1,5 @@
 import { ProductCard } from "@/app/_components/ProductCard";
-import { Product } from "@/lib/generated/prisma/client";
+import { Product } from "@prisma/client";
 
 type ProductsListProps = {
 	products: Product[];

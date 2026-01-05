@@ -21,6 +21,7 @@ import {
 	FieldGroup,
 	FieldLabel,
 } from "@/components/ui/field";
+import { signIn } from "next-auth/react";
 
 export default function SignInPage() {
 	const {
@@ -35,8 +36,15 @@ export default function SignInPage() {
 		},
 	});
 
-	const onSubmit = (data: SigninSchemaType) => {
+	const onSubmit = async (data: SigninSchemaType) => {
 		console.log("Form submitted:", data);
+		const result = await signIn("credentials", {
+			email: data.email,
+			password: data.password,
+			redirect: false,
+		});
+
+		console.log(result);
 	};
 
 	return (
