@@ -1,6 +1,6 @@
 "use client";
 
-import { Product } from "@/app/generated/prisma/client";
+import { Product } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { addProductToProductsCart } from "@/lib/actions";
 import { ShoppingCart } from "lucide-react";

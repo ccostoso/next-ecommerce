@@ -1,6 +1,5 @@
 generator client {
-	provider = "prisma-client"
-	output   = "../app/generated/prisma"
+	provider = "prisma-client-js"
 }
 
 datasource db {
@@ -80,4 +79,21 @@ model OrderItem {
 
 	@@index([orderId])
 	@@index([productId])
+}
+
+model User {
+	id          String   @id @default(cuid())
+	email       String   @unique
+	password    String
+	name 	  	String?
+	userRole    UserRole @relation(fields: [roleId], references: [id])
+	roleId      String
+	createdAt   DateTime @default(now())
+	updatedAt   DateTime @updatedAt
+}
+
+model UserRole {
+	id    String @id @default(cuid())
+	name  String @unique
+	users User[]
 }

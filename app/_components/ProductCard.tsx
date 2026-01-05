@@ -1,4 +1,4 @@
-import { Product } from "@/app/generated/prisma/client";
+import { Product } from "@prisma/client";
 import {
 	Card,
 	CardDescription,
